@@ -7,6 +7,7 @@ require "rails_api_foundation/configuration"
 require "rails_api_foundation/concerns/api_response_helpers"
 require "rails_api_foundation/concerns/error_handling"
 require "rails_api_foundation/service_object"
+require "rails_api_foundation/health_check"
 
 if defined?(Rails)
   require "rails_api_foundation/engine"
