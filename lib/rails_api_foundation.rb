@@ -1,3 +1,7 @@
+# frozen_string_literal: true
+
+require "active_support"
+require "active_support/concern"
 require "rails_api_foundation/version"
 require "rails_api_foundation/configuration"
 require "rails_api_foundation/concerns/api_response_helpers"

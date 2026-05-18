@@ -1,8 +1,0 @@
-.git
-.gitignore
-log/*
-tmp/*
-.env*
-spec/
-test/
-*.md
