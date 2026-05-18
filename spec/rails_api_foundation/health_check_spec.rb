@@ -3,11 +3,21 @@
 require "spec_helper"
 
 RSpec.describe RailsApiFoundation::HealthCheck do
+  let(:connection) { instance_double("ActiveRecord::ConnectionAdapters::AbstractAdapter") }
+
+  before do
+    ar_base = class_double("ActiveRecord::Base").as_stubbed_const
+    allow(ar_base).to receive(:connection).and_return(connection)
+
+    rails = class_double("Rails").as_stubbed_const
+    app   = double("app", config: double("config", try: "unknown"))
+    allow(rails).to receive(:application).and_return(app)
+    allow(rails).to receive(:env).and_return(double(development?: false))
+  end
+
   describe ".call" do
     context "when database is healthy" do
-      before do
-        allow(ActiveRecord::Base.connection).to receive(:execute).with("SELECT 1")
-      end
+      before { allow(connection).to receive(:execute).with("SELECT 1") }
 
       it "returns success" do
         expect(described_class.call).to be_success
@@ -30,8 +40,7 @@ RSpec.describe RailsApiFoundation::HealthCheck do
 
     context "when database is down" do
       before do
-        allow(ActiveRecord::Base.connection).to receive(:execute)
-          .and_raise(PG::ConnectionBad, "connection refused")
+        allow(connection).to receive(:execute).and_raise(StandardError, "connection refused")
       end
 
       it "returns failure" do
@@ -42,9 +51,10 @@ RSpec.describe RailsApiFoundation::HealthCheck do
         expect(described_class.call.payload[:status]).to eq("degraded")
       end
 
-      it "includes error message in database check" do
+      it "includes error in database check" do
         result = described_class.call
         expect(result.payload.dig(:checks, :database, :status)).to eq("error")
+        expect(result.payload.dig(:checks, :database, :message)).to eq("connection refused")
       end
     end
   end

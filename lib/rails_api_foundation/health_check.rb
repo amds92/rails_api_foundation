@@ -10,8 +10,8 @@ module RailsApiFoundation
 
       payload = {
         status:    overall,
-        version:   Rails.application.config.try(:app_version) || "unknown",
-        timestamp: Time.current.iso8601,
+        version:   app_version,
+        timestamp: Time.now.utc.iso8601,
         checks:    checks
       }
 
@@ -19,6 +19,10 @@ module RailsApiFoundation
     end
 
     private
+
+    def app_version
+      defined?(Rails) ? Rails.application.config.try(:app_version) || "unknown" : "unknown"
+    end
 
     def database_status
       ActiveRecord::Base.connection.execute("SELECT 1")
