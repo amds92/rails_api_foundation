@@ -20,13 +20,12 @@ Gem::Specification.new do |spec|
 
   spec.files = Dir[
     "lib/**/*",
-    "generators/**/*",
     "LICENSE",
     "README.md",
     "CHANGELOG.md"
   ]
 
-  spec.require_paths = ["lib", "generators"]
+  spec.require_paths = ["lib"]
 
   spec.add_dependency "rails", ">= 7.0"
   spec.add_dependency "lograge", ">= 0.12"
