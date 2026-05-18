@@ -9,6 +9,7 @@ module RailsApiFoundation
 
     initializer "rails_api_foundation.lograge" do |app|
       next unless RailsApiFoundation.configuration.log_format == :json
+      next if app.config.lograge.enabled
 
       app.config.lograge.enabled       = true
       app.config.lograge.formatter     = Lograge::Formatters::Json.new
@@ -20,8 +21,8 @@ module RailsApiFoundation
           host:       event.payload[:host]
         }
 
-        options[:user_id]  = event.payload[:user_id]  if event.payload[:user_id]
-        options[:params]   = event.payload[:params]   if RailsApiFoundation.configuration.log_include_params
+        options[:user_id] = event.payload[:user_id] if event.payload[:user_id]
+        options[:params]  = event.payload[:params]  if RailsApiFoundation.configuration.log_include_params
 
         options
       end

@@ -5,6 +5,8 @@ module RailsApiFoundation
     module ErrorHandling
       extend ActiveSupport::Concern
 
+      include ApiResponseHelpers
+
       included do
         rescue_from ActiveRecord::RecordNotFound,        with: :handle_not_found
         rescue_from ActiveRecord::RecordInvalid,         with: :handle_record_invalid
