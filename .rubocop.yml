@@ -8,3 +8,7 @@ AllCops:
     - "vendor/**/*"
     - "spec/**/*"
     - "generators/**/templates/**/*"
+    - "lib/generators/**/templates/**/*"
+
+Layout/SpaceInsideArrayLiteralBrackets:
+  Enabled: false
